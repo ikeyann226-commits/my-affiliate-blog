@@ -1,0 +1,26 @@
+---
+interface Props {
+	visible: boolean;
+}
+const { visible } = Astro.props;
+---
+{
+	visible && (
+		<div role="note" aria-label="広告に関する表記" class="affiliate-disclosure">
+			<p>本記事はPR・広告を含みます。当サイトはアフィリエイトプログラムにより収益を得ています。</p>
+		</div>
+	)
+}
+<style>
+	.affiliate-disclosure {
+		background: rgb(var(--gray-light));
+		border-radius: 8px;
+		padding: 0.75em 1em;
+		margin: 1em auto;
+		max-width: 720px;
+		font-size: 0.9em;
+	}
+	.affiliate-disclosure p {
+		margin: 0;
+	}
+</style>

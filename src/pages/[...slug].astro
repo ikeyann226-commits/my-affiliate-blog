@@ -1,0 +1,28 @@
+---
+import { render } from 'astro:content';
+import { getPublishedPosts } from '../lib/published-posts';
+import { isValidSlug } from '../lib/posts';
+import BlogPost from '../layouts/BlogPost.astro';
+
+export async function getStaticPaths() {
+	const posts = await getPublishedPosts();
+	for (const entry of posts) {
+		if (!isValidSlug(entry.id)) {
+			throw new Error(
+				`記事スラッグ "${entry.id}" は固定ページ（about/contact/privacy-policy/category/tags）と衝突するため使用できません。ファイル名を変更してください。`
+			);
+		}
+	}
+	return posts.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BlogPost entry={entry}>
+	<Content />
+</BlogPost>

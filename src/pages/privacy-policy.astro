@@ -1,0 +1,29 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead title="プライバシーポリシー" description="個人情報の取り扱いについて" />
+	</head>
+	<body>
+		<Header />
+		<main class="prose">
+			<h1>プライバシーポリシー</h1>
+			<!-- TODO(05/00): 個人情報保護法・外部送信規律（GA4等）・利用ASPの明記を含む正式な条文に差し替える -->
+			<p>（本文は05・00と連携して確定する）</p>
+		</main>
+		<Footer />
+	</body>
+</html>
+<style>
+	.prose {
+		width: 720px;
+		max-width: calc(100% - 2em);
+		margin: auto;
+		padding: 1em;
+	}
+</style>

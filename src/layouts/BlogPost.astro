@@ -5,15 +5,36 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import StructuredData from '../components/StructuredData.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+import { buildArticleSchema, buildBreadcrumbSchema, buildFaqSchema } from '../lib/seo';
+import { AUTHOR_NAME, SITE_URL } from '../consts';
 
-type Props = CollectionEntry<'blog'>['data'];
+interface Props {
+	entry: CollectionEntry<'blog'>;
+}
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { entry } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, category, hasAffiliateLinks, faq } = entry.data;
+
+const canonicalUrl = new URL(Astro.url.pathname, SITE_URL).toString();
+const articleSchema = buildArticleSchema(
+	{ title, description, pubDate, updatedDate, authorName: AUTHOR_NAME },
+	canonicalUrl
+);
+const breadcrumbSchema = buildBreadcrumbSchema([
+	{ name: 'ホーム', url: SITE_URL },
+	{ name: category, url: new URL(`/category/${category}/`, SITE_URL).toString() },
+	{ name: title, url: canonicalUrl },
+]);
+const faqSchema = buildFaqSchema(faq);
+const jsonLd = [articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])];
 ---
 
-<html lang="en">
+<html lang="ja">
 	<head>
 		<BaseHead title={title} description={description} />
+		<StructuredData schemas={jsonLd} />
 		<style>
 			main {
 				width: calc(100% - 2em);
@@ -69,7 +90,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 							{
 								updatedDate && (
 									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
+										更新日: <FormattedDate date={updatedDate} />
 									</div>
 								)
 							}
@@ -77,6 +98,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 						<h1>{title}</h1>
 						<hr />
 					</div>
+					<AffiliateDisclosure visible={hasAffiliateLinks} />
 					<slot />
 				</div>
 			</article>

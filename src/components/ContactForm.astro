@@ -1,0 +1,40 @@
+---
+import { FORMSPREE_ENDPOINT } from '../consts';
+---
+<form action={FORMSPREE_ENDPOINT} method="POST">
+	<label>
+		お名前
+		<input type="text" name="name" required />
+	</label>
+	<label>
+		メールアドレス
+		<input type="email" name="email" required />
+	</label>
+	<label>
+		お問い合わせ内容
+		<textarea name="message" required></textarea>
+	</label>
+	<button type="submit">送信</button>
+</form>
+<style>
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+		max-width: 480px;
+	}
+	label {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25em;
+	}
+	input,
+	textarea {
+		padding: 0.5em;
+		font: inherit;
+	}
+	button {
+		align-self: flex-start;
+		padding: 0.5em 1.5em;
+	}
+</style>
